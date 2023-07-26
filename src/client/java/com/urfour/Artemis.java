@@ -16,8 +16,9 @@ public class Artemis implements ClientModInitializer{
 
 	@Override
 	public void onInitializeClient() {
+		Server server = new Server();
 		ModConfig.registerConfigs();
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(new Server(), 0, 100, TimeUnit.MILLISECONDS);
+		scheduler.scheduleAtFixedRate(server, 0, 100, TimeUnit.MILLISECONDS);
 	}
 }

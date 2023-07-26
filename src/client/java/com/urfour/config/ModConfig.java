@@ -19,11 +19,10 @@ public class ModConfig {
     }
 
     private static void createConfigs() {
-        configs.addKeyValuePair(new Pair<>("port", 9696), "int");
+        // configs.addKeyValuePair(new Pair<>("port", 9696), "int");
     }
 
     private static void assignConfigs() {
-        PORT = CONFIG.getOrDefault("port", 9696);
-        System.out.println("All " + configs.getConfigsList().size() + " have been set properly");
+        // PORT = CONFIG.getOrDefault("port", 9696);
     }
 }
