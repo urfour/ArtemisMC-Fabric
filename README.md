@@ -1,1 +1,30 @@
 # ArtemisMC
+[![GitHub release version](https://img.shields.io/github/v/release/urfour/Artemis.Plugins.Minecraft.svg)](https://github.com/urfour/ArtemisMC/releases)
+![Minecraft version](https://img.shields.io/badge/MC%20version-1.20.1-green)
+![Fabric version](https://img.shields.io/badge/Fabric%20version-0.11.2-8A2BE2)
+
+ArtemisMC is a Fabric mod designed to include Minecraft Game State information in [Artemis](https://artemis-rgb.com/).
+
+:warning: This mod alone doesn't work, it needs to be installed with the corresponding [plugin](https://github.com/urfour/Artemis.Plugins.Minecraft)  on Artemis! 
+
+## Information collected
+
+- Player information
+  - Health
+  - Armor
+  - Experience
+  - Food / Saturation
+  - Effects (potion / beacons and other)
+  - State (running, swimming, sneaking, burning)
+
+It uses the IP provided by Artemis, so feel free to change the port if you want.
+
+## Installation
+
+- Install [Fabric](https://fabricmc.net/use/installer/) on your Minecraft launcher
+- Drop the mod .jar from the [releases](https://github.com/urfour/ArtemisMC/releases) on your mods/ folder
+- Enjoy!
+
+## TODO
+- Add more information (keybinds, chat, ...)
+- Implement Forge compatibility
