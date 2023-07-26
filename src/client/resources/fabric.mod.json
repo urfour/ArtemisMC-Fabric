@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "artemismc",
+  "version": "1.0.0",
+
+  "name": "Artemis",
+  "description": "Game State Integration for Artemis RGB",
+  "authors": [
+    "UrFour"
+  ],
+  "contact": {
+    "homepage": "https://artemis-rgb.com/",
+    "sources": "https://github.com/Artemis-RGB/Artemis"
+  },
+
+  "license": "CC0-1.0",
+  "custom":
+  {
+    "modmenu:clientsideOnly": true
+  },
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.urfour.Artemis"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  }
+}
