@@ -1,11 +1,10 @@
 # ArtemisMC
-[![GitHub release version](https://img.shields.io/github/v/release/urfour/Artemis.Plugins.Minecraft.svg)](https://github.com/urfour/ArtemisMC/releases)
 ![Minecraft version](https://img.shields.io/badge/MC%20version-1.20.1-green)
 ![Fabric version](https://img.shields.io/badge/Fabric%20version-0.11.2-8A2BE2)
 
-ArtemisMC is a Fabric mod designed to include Minecraft Game State information in [Artemis](https://artemis-rgb.com/).
+ArtemisMC is a Fabric mod designed to add Minecraft Game State Integration in [Artemis](https://artemis-rgb.com/).
 
-:warning: This mod alone doesn't work, it needs to be installed with the corresponding [plugin](https://github.com/urfour/Artemis.Plugins.Minecraft)  on Artemis! 
+⚠️ This mod alone doesn't work, it needs to be installed with the corresponding [plugin](https://github.com/urfour/ArtemisMC-Plugin) on Artemis! 
 
 ## Information collected
 
