@@ -39,8 +39,8 @@ public class MinecraftInfos {
         private HashMap<String, Boolean> playerEffects = new HashMap<>();
         private static final HashMap<String, StatusEffect> TARGET_EFFECTS;
         private HashMap<String, String> armor = new HashMap<>();
-        private String currentLeftItem;
-        private String currentRightItem;
+        private String leftHandItem;
+        private String rightHandItem;
 
         static {
             TARGET_EFFECTS = new HashMap<>();
@@ -101,8 +101,8 @@ public class MinecraftInfos {
                 ArrayList<ItemStack> armorItems = new ArrayList<>();
                 player.getHandItems().forEach(handItems::add);
                 player.getArmorItems().forEach(armorItems::add);
-                currentRightItem = handItems.get(0).getTranslationKey();
-                currentLeftItem = handItems.get(1).getTranslationKey();
+                rightHandItem = handItems.get(0).getTranslationKey();
+                leftHandItem = handItems.get(1).getTranslationKey();
                 armor.put("boots", armorItems.get(0).getTranslationKey());
                 armor.put("leggings", armorItems.get(1).getTranslationKey());
                 armor.put("chestplate", armorItems.get(2).getTranslationKey());
