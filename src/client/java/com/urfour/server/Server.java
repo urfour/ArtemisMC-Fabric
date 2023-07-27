@@ -1,7 +1,7 @@
 package com.urfour.server;
 
 import com.google.gson.Gson;
-import com.urfour.config.ModConfig;
+import com.urfour.infos.MinecraftInfos;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;

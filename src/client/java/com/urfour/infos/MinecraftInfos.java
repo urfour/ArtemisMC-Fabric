@@ -1,20 +1,31 @@
-package com.urfour.server;
+package com.urfour.infos;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.option.ControlsOptionsScreen;
+import net.minecraft.client.gui.screen.option.KeybindsScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MinecraftInfos {
     private PlayerInfos player = new PlayerInfos();
     private WorldInfos world = new WorldInfos();
+    private GUIInfos gui = new GUIInfos();
 
     public void update() {
         player.getInfos();
         world.getInfos();
+        gui.getInfos();
     }
 
     private static class PlayerInfos {
@@ -23,7 +34,7 @@ public class MinecraftInfos {
         private float maxHealth;
         private float absorption;
         private boolean isDead;
-        private int armor;
+        private int armorPoints;
         private int experienceLevel;
         private float experience;
         private int foodLevel;
@@ -33,8 +44,10 @@ public class MinecraftInfos {
         private boolean isBurning;
         private boolean isInWater;
         private HashMap<String, Boolean> playerEffects = new HashMap<>();
-
         private static final HashMap<String, StatusEffect> TARGET_EFFECTS;
+        private HashMap<String, String> armor = new HashMap<>();
+        private String leftHandItem;
+        private String rightHandItem;
 
         static {
             TARGET_EFFECTS = new HashMap<>();
@@ -71,7 +84,14 @@ public class MinecraftInfos {
             TARGET_EFFECTS.put("bad_omen", StatusEffect.byRawId(31));
             TARGET_EFFECTS.put("villageHero", StatusEffect.byRawId(32));
         }
-
+        private String testIfAir(ItemStack item) {
+            if (item.getTranslationKey() == "block.minecraft.air") {
+                return null;
+            }
+            else {
+                return item.getTranslationKey();
+            }
+        }
         private void getInfos() {
             try {
                 PlayerEntity player = MinecraftClient.getInstance().player;
@@ -80,7 +100,7 @@ public class MinecraftInfos {
                 maxHealth = player.getMaxHealth();
                 absorption = player.getAbsorptionAmount();
                 isDead = !player.isLiving();
-                armor = player.getArmor();
+                armorPoints = player.getArmor();
                 experienceLevel = player.experienceLevel;
                 experience = player.experienceProgress;
                 foodLevel = player.getHungerManager().getFoodLevel();
@@ -91,7 +111,16 @@ public class MinecraftInfos {
                 isInWater = player.isSubmergedInWater();
                 for (Map.Entry<String, StatusEffect> effect : TARGET_EFFECTS.entrySet())
                     playerEffects.put(effect.getKey(), player.getStatusEffect(effect.getValue()) != null);
-
+                ArrayList<String> handItems = new ArrayList<>();
+                ArrayList<String> armorItems = new ArrayList<>();
+                player.getHandItems().forEach(item -> handItems.add(testIfAir(item)));
+                player.getArmorItems().forEach(item -> handItems.add(testIfAir(item)));
+                rightHandItem = handItems.get(0);
+                leftHandItem = handItems.get(1);
+                armor.put("boots", armorItems.get(0));
+                armor.put("leggings", armorItems.get(1));
+                armor.put("chestplate", armorItems.get(2));
+                armor.put("helmet", armorItems.get(3));
                 inGame = true;
             } catch (Exception ex) {
                 inGame = false;
@@ -117,6 +146,48 @@ public class MinecraftInfos {
                 isRaining = world.isRaining();
                 dimension = world.getRegistryKey().getValue().toString();
             } catch (Exception ex) {
+
+            }
+        }
+    }
+    private static class GUIInfos {
+        private class KeyCode {
+            public String code;
+            public String context;
+
+            public KeyCode(String code, String context) {
+                this.code = code;
+                this.context = context;
+            }
+        }
+        private boolean optionsGuiOpen;
+        private boolean controlsGuiOpen;
+        private boolean chatGuiOpen;
+        private boolean keybindsGuiOpen;
+        private KeyCode[] keys;
+
+        private void getInfos() {
+            try {
+                MinecraftClient client = MinecraftClient.getInstance();
+                chatGuiOpen = client.currentScreen instanceof ChatScreen;
+                optionsGuiOpen = client.currentScreen instanceof OptionsScreen;
+                controlsGuiOpen = client.currentScreen instanceof ControlsOptionsScreen;
+                keybindsGuiOpen = client.currentScreen instanceof KeybindsScreen;
+                /*keys = null;
+                if (controlsGuiOpen) {
+                    KeyBinding[] temp = client.options.;
+                    List<KeyCode> tempList = new ArrayList<>();
+                    for (KeyBinding key : temp) {
+                        System.out.println(key.toString())
+                        if (!key.getTranslationKey().contains("unknown") && key.getTranslationKey().contains("keyboard")) {
+                            String context = key.getCategory().equals("key.categories.inventory") ? "GUI" : "UNIVERSAL";
+                            tempList.add(new KeyCode(key.getTranslationKey(), null, context));
+                        }
+                    }
+                    keys = new KeyCode[tempList.size()];
+                    keys = tempList.toArray(keys);
+                }*/
+            } catch (Exception ignore) {
 
             }
         }
