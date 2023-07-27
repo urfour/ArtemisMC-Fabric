@@ -4,8 +4,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MinecraftInfos {
@@ -23,7 +27,7 @@ public class MinecraftInfos {
         private float maxHealth;
         private float absorption;
         private boolean isDead;
-        private int armor;
+        private int armorPoints;
         private int experienceLevel;
         private float experience;
         private int foodLevel;
@@ -33,8 +37,10 @@ public class MinecraftInfos {
         private boolean isBurning;
         private boolean isInWater;
         private HashMap<String, Boolean> playerEffects = new HashMap<>();
-
         private static final HashMap<String, StatusEffect> TARGET_EFFECTS;
+        private HashMap<String, String> armor = new HashMap<>();
+        private String currentLeftItem;
+        private String currentRightItem;
 
         static {
             TARGET_EFFECTS = new HashMap<>();
@@ -80,7 +86,7 @@ public class MinecraftInfos {
                 maxHealth = player.getMaxHealth();
                 absorption = player.getAbsorptionAmount();
                 isDead = !player.isLiving();
-                armor = player.getArmor();
+                armorPoints = player.getArmor();
                 experienceLevel = player.experienceLevel;
                 experience = player.experienceProgress;
                 foodLevel = player.getHungerManager().getFoodLevel();
@@ -91,7 +97,16 @@ public class MinecraftInfos {
                 isInWater = player.isSubmergedInWater();
                 for (Map.Entry<String, StatusEffect> effect : TARGET_EFFECTS.entrySet())
                     playerEffects.put(effect.getKey(), player.getStatusEffect(effect.getValue()) != null);
-
+                ArrayList<ItemStack> handItems = new ArrayList<>();
+                ArrayList<ItemStack> armorItems = new ArrayList<>();
+                player.getHandItems().forEach(handItems::add);
+                player.getArmorItems().forEach(armorItems::add);
+                currentRightItem = handItems.get(0).getTranslationKey();
+                currentLeftItem = handItems.get(1).getTranslationKey();
+                armor.put("boots", armorItems.get(0).getTranslationKey());
+                armor.put("leggings", armorItems.get(1).getTranslationKey());
+                armor.put("chestplate", armorItems.get(2).getTranslationKey());
+                armor.put("helmet", armorItems.get(3).getTranslationKey());
                 inGame = true;
             } catch (Exception ex) {
                 inGame = false;
