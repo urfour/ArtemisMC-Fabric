@@ -67,4 +67,3 @@ jobs:
           asset_path: artemis-${{ github.ref_name }}.jar
           asset_name: artemis-${{ github.ref_name }}.jar
           asset_content_type: application/octet-stream
-
