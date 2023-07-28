@@ -1,0 +1,38 @@
+on:
+    push:
+      tags:
+        - v*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ArtemisMC
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: v${{ github.ref_name }}
+          body: TODO
+          draft: true
+          prerelease: false
+          files: build/libs/*
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artemis-{{ github.ref }}.jar
+          asset_name: artemis-{{ github.ref }}.jar
+          asset_content_type: application/octet-stream
+
