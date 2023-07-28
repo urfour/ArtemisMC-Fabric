@@ -8,6 +8,7 @@ name: Upload Release
 
 jobs:
   release:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
