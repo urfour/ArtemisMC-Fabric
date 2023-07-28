@@ -33,7 +33,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         uses: actions/upload-artifact@v3
         with:
           name: ArtemisMC
@@ -64,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artemis-{{ github.ref_name }}.jar
-          asset_name: artemis-{{ github.ref_name }}.jar
+          asset_path: artemis-${{ github.ref_name }}.jar
+          asset_name: artemis-${{ github.ref_name }}.jar
           asset_content_type: application/octet-stream
 
