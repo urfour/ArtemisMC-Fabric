@@ -4,6 +4,8 @@ on:
     tags:
       - '*'
 
+name: Upload Release
+
 jobs:
   release:
     runs-on: ubuntu-latest
