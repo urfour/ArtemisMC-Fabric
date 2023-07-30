@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "artemismc",
-  "version": "1.0.0",
+  "version": "1.1.1",
 
   "name": "Artemis",
   "description": "Game State Integration for Artemis RGB",
@@ -10,10 +10,10 @@
   ],
   "contact": {
     "homepage": "https://artemis-rgb.com/",
-    "sources": "https://github.com/Artemis-RGB/Artemis"
+    "sources": "https://github.com/urfour/ArtemisMC-Fabric"
   },
-
-  "license": "CC0-1.0",
+  "license": "LGPL",
+  "icon": "artemis_logo.png",
   "custom":
   {
     "modmenu:clientsideOnly": true
@@ -21,7 +21,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.urfour.Artemis"
+      "com.urfour.artemis.Artemis"
     ]
   },
   "depends": {

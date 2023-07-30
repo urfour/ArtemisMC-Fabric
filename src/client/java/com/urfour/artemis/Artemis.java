@@ -1,7 +1,6 @@
-package com.urfour;
+package com.urfour.artemis;
 
-import com.urfour.config.ModConfig;
-import com.urfour.server.Server;
+import com.urfour.artemis.server.Server;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,7 +16,6 @@ public class Artemis implements ClientModInitializer{
 	@Override
 	public void onInitializeClient() {
 		Server server = new Server();
-		ModConfig.registerConfigs();
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		scheduler.scheduleAtFixedRate(server, 0, 100, TimeUnit.MILLISECONDS);
 	}

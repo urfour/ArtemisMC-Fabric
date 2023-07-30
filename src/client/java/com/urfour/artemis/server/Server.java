@@ -1,7 +1,7 @@
-package com.urfour.server;
+package com.urfour.artemis.server;
 
 import com.google.gson.Gson;
-import com.urfour.infos.MinecraftInfos;
+import com.urfour.artemis.infos.MinecraftInfos;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -9,7 +9,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +20,10 @@ public class Server implements Runnable {
     private static final String WEB_SERVER_FILE = System.getenv("ProgramData") + "/Artemis/webserver.txt";
     private String IP = "http://localhost:9696";
     private Gson gson =  new Gson();
-    public void getIP() {
-
-    }
 
     public Server() {
         try {
-            InputStream file = new FileInputStream(new File(WEB_SERVER_FILE));
+            InputStream file = new FileInputStream(WEB_SERVER_FILE);
             IP = new String(file.readAllBytes());
             LOGGER.info("Using IP " + IP + " to send in-game information.");
         } catch (IOException e) {

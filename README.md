@@ -21,9 +21,8 @@ It uses the IP provided by Artemis, so feel free to change the port if you want.
 ## Installation
 
 - Install [Fabric](https://fabricmc.net/use/installer/) on your Minecraft launcher
-- Drop the mod .jar from the [releases](https://github.com/urfour/ArtemisMC/releases) on your mods/ folder
+- Drop the mod .jar from the [releases](https://github.com/urfour/ArtemisMC-Fabric/releases) on your mods/ folder
 - Enjoy!
 
 ## TODO
 - Add more information (keybinds, chat, ...)
-- Implement Forge compatibility
