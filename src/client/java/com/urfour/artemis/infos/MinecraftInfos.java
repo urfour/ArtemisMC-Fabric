@@ -43,6 +43,7 @@ public class MinecraftInfos {
         private HashMap<String, Boolean> playerEffects = new HashMap<>();
         private static final HashMap<String, StatusEffect> TARGET_EFFECTS;
         private HashMap<String, String> armor = new HashMap<>();
+        private int currentHotbarSlot;
         private String leftHandItem;
         private String rightHandItem;
 
@@ -114,6 +115,7 @@ public class MinecraftInfos {
                 player.getArmorItems().forEach(item -> handItems.add(testIfAir(item)));
                 rightHandItem = handItems.get(0);
                 leftHandItem = handItems.get(1);
+                currentHotbarSlot = player.getInventory().selectedSlot;
                 armor.put("boots", armorItems.get(0));
                 armor.put("leggings", armorItems.get(1));
                 armor.put("chestplate", armorItems.get(2));
