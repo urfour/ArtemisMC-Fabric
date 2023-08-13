@@ -83,18 +83,18 @@ public class MinecraftInfos {
             TARGET_EFFECTS.put("villageHero", StatusEffect.byRawId(32));
         }
         private String testIfAir(ItemStack item) {
-            if (item.getTranslationKey() == "block.minecraft.air") {
+            if (item.getTranslationKey().equals("block.minecraft.air")) {
                 return null;
             }
             else {
-                return item.getTranslationKey();
+                return item.getTranslationKey().replace("block.", "");
             }
         }
         private void getInfos() {
             try {
                 PlayerEntity player = MinecraftClient.getInstance().player;
                 assert player != null;
-                this.health = player.getHealth();
+                health = player.getHealth();
                 maxHealth = player.getMaxHealth();
                 absorption = player.getAbsorptionAmount();
                 isDead = !player.isLiving();
@@ -116,10 +116,12 @@ public class MinecraftInfos {
                 rightHandItem = handItems.get(0);
                 leftHandItem = handItems.get(1);
                 currentHotbarSlot = player.getInventory().selectedSlot;
-                armor.put("boots", armorItems.get(0));
-                armor.put("leggings", armorItems.get(1));
-                armor.put("chestplate", armorItems.get(2));
-                armor.put("helmet", armorItems.get(3));
+                if (!armorItems.isEmpty()) {
+                    armor.put("boots", armorItems.get(0));
+                    armor.put("leggings", armorItems.get(1));
+                    armor.put("chestplate", armorItems.get(2));
+                    armor.put("helmet", armorItems.get(3));
+                }
                 inGame = true;
             } catch (Exception ex) {
                 inGame = false;
@@ -150,7 +152,7 @@ public class MinecraftInfos {
         }
     }
     private static class GUIInfos {
-        private class KeyCode {
+        private static class KeyCode {
             public String code;
             public String context;
 
