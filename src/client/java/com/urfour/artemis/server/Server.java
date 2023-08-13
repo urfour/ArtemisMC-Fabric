@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 public class Server implements Runnable {
 
@@ -20,7 +21,7 @@ public class Server implements Runnable {
             return System.getenv("ProgramData");
         }
         else {
-            return System.getenv("user.home") + "/.local/share";
+            return System.getProperty("user.home") + "/.local/share";
         }
     }
     private MinecraftInfos infos = new MinecraftInfos();
