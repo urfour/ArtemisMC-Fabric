@@ -6,146 +6,165 @@ import net.minecraft.client.gui.screen.option.ControlsOptionsScreen;
 import net.minecraft.client.gui.screen.option.KeybindsScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MinecraftInfos {
-    private PlayerInfos player = new PlayerInfos();
-    private WorldInfos world = new WorldInfos();
-    private GUIInfos gui = new GUIInfos();
+    private PlayerInfos Player;
+    private WorldInfos World;
+    private GUIInfos Gui;
+    private static final Logger LOGGER = LogManager.getLogger("MinecraftInfos");
 
     public void update() {
-        player.getInfos();
-        world.getInfos();
-        gui.getInfos();
+        // Lazy initialization - only create these when we actually need them
+        // This ensures Minecraft classes are loaded only after the game is ready
+        if (Player == null) {
+            Player = new PlayerInfos();
+            World = new WorldInfos();
+            Gui = new GUIInfos();
+        }
+        Player.getInfos();
+        World.getInfos();
+        Gui.getInfos();
+        // Log only occasionally to avoid spam (every 50 updates = ~5 seconds)
+        // if (System.currentTimeMillis() % 5000 < 100) {
+        //     LOGGER.info("MinecraftInfos updated - Biome: " + World.Biome);
+        // }
     }
 
     private static class PlayerInfos {
-        private boolean inGame;
-        private float health;
-        private float maxHealth;
-        private float absorption;
-        private boolean isDead;
-        private int armorPoints;
-        private int experienceLevel;
-        private float experience;
-        private int foodLevel;
-        private float saturationLevel;
-        private boolean isSneaking;
-        private boolean isRidingHorse;
-        private boolean isBurning;
-        private boolean isInWater;
-        private HashMap<String, Boolean> playerEffects = new HashMap<>();
-        private static final HashMap<String, StatusEffect> TARGET_EFFECTS;
-        private HashMap<String, String> armor = new HashMap<>();
-        private int currentHotbarSlot;
-        private String leftHandItem;
-        private String rightHandItem;
+        private boolean InGame;
+        private float Health;
+        private float MaxHealth;
+        private float Absorption;
+        private boolean IsDead;
+        private int ArmorPoints;
+        private int ExperienceLevel;
+        private float Experience;
+        private int FoodLevel;
+        private float SaturationLevel;
+        private boolean IsSneaking;
+        private boolean IsRidingHorse;
+        private boolean IsBurning;
+        private boolean IsInWater;
+        private HashMap<String, Boolean> PlayerEffects = new HashMap<>();
+        private static final HashMap<String, RegistryEntry<StatusEffect>> TARGET_EFFECTS;
+        private HashMap<String, String> Armor = new HashMap<>();
+        private int CurrentHotbarSlot;
+        private String LeftHandItem;
+        private String RightHandItem;
 
         static {
             TARGET_EFFECTS = new HashMap<>();
-            TARGET_EFFECTS.put("moveSpeed", StatusEffect.byRawId(1));
-            TARGET_EFFECTS.put("moveSlowdown", StatusEffect.byRawId(2));
-            TARGET_EFFECTS.put("haste", StatusEffect.byRawId(3));
-            TARGET_EFFECTS.put("miningFatigue", StatusEffect.byRawId(4));
-            TARGET_EFFECTS.put("strength", StatusEffect.byRawId(5));
-            TARGET_EFFECTS.put("instantHealth", StatusEffect.byRawId(6));
-            TARGET_EFFECTS.put("instantDamage", StatusEffect.byRawId(7));
-            TARGET_EFFECTS.put("jumpBoost", StatusEffect.byRawId(8));
-            TARGET_EFFECTS.put("confusion", StatusEffect.byRawId(9));
-            TARGET_EFFECTS.put("regeneration", StatusEffect.byRawId(10));
-            TARGET_EFFECTS.put("resistance", StatusEffect.byRawId(11));
-            TARGET_EFFECTS.put("fireResistance", StatusEffect.byRawId(12));
-            TARGET_EFFECTS.put("waterBreathing", StatusEffect.byRawId(13));
-            TARGET_EFFECTS.put("invisibility", StatusEffect.byRawId(14));
-            TARGET_EFFECTS.put("blindness", StatusEffect.byRawId(15));
-            TARGET_EFFECTS.put("nightVision", StatusEffect.byRawId(16));
-            TARGET_EFFECTS.put("hunger", StatusEffect.byRawId(17));
-            TARGET_EFFECTS.put("weakness", StatusEffect.byRawId(18));
-            TARGET_EFFECTS.put("poison", StatusEffect.byRawId(19));
-            TARGET_EFFECTS.put("wither", StatusEffect.byRawId(20));
-            TARGET_EFFECTS.put("healthBoost", StatusEffect.byRawId(21));
-            TARGET_EFFECTS.put("absorption", StatusEffect.byRawId(22));
-            TARGET_EFFECTS.put("saturation", StatusEffect.byRawId(23));
-            TARGET_EFFECTS.put("glowing", StatusEffect.byRawId(24));
-            TARGET_EFFECTS.put("levitation", StatusEffect.byRawId(25));
-            TARGET_EFFECTS.put("luck", StatusEffect.byRawId(26));
-            TARGET_EFFECTS.put("badLuck", StatusEffect.byRawId(27));
-            TARGET_EFFECTS.put("slowFalling", StatusEffect.byRawId(28));
-            TARGET_EFFECTS.put("conduitPower", StatusEffect.byRawId(29));
-            TARGET_EFFECTS.put("dolphinsGrace", StatusEffect.byRawId(30));
-            TARGET_EFFECTS.put("bad_omen", StatusEffect.byRawId(31));
-            TARGET_EFFECTS.put("villageHero", StatusEffect.byRawId(32));
+            TARGET_EFFECTS.put("MoveSpeed", StatusEffects.SPEED);
+            TARGET_EFFECTS.put("MoveSlowdown", StatusEffects.SLOWNESS);
+            TARGET_EFFECTS.put("Haste", StatusEffects.HASTE);
+            TARGET_EFFECTS.put("MiningFatigue", StatusEffects.MINING_FATIGUE);
+            TARGET_EFFECTS.put("Strength", StatusEffects.STRENGTH);
+            TARGET_EFFECTS.put("InstantHealth", StatusEffects.INSTANT_HEALTH);
+            TARGET_EFFECTS.put("InstantDamage", StatusEffects.INSTANT_DAMAGE);
+            TARGET_EFFECTS.put("JumpBoost", StatusEffects.JUMP_BOOST);
+            TARGET_EFFECTS.put("Confusion", StatusEffects.NAUSEA);
+            TARGET_EFFECTS.put("Regeneration", StatusEffects.REGENERATION);
+            TARGET_EFFECTS.put("Resistance", StatusEffects.RESISTANCE);
+            TARGET_EFFECTS.put("FireResistance", StatusEffects.FIRE_RESISTANCE);
+            TARGET_EFFECTS.put("WaterBreathing", StatusEffects.WATER_BREATHING);
+            TARGET_EFFECTS.put("Invisibility", StatusEffects.INVISIBILITY);
+            TARGET_EFFECTS.put("Blindness", StatusEffects.BLINDNESS);
+            TARGET_EFFECTS.put("NightVision", StatusEffects.NIGHT_VISION);
+            TARGET_EFFECTS.put("Hunger", StatusEffects.HUNGER);
+            TARGET_EFFECTS.put("Weakness", StatusEffects.WEAKNESS);
+            TARGET_EFFECTS.put("Poison", StatusEffects.POISON);
+            TARGET_EFFECTS.put("Wither", StatusEffects.WITHER);
+            TARGET_EFFECTS.put("HealthBoost", StatusEffects.HEALTH_BOOST);
+            TARGET_EFFECTS.put("Absorption", StatusEffects.ABSORPTION);
+            TARGET_EFFECTS.put("Saturation", StatusEffects.SATURATION);
+            TARGET_EFFECTS.put("Glowing", StatusEffects.GLOWING);
+            TARGET_EFFECTS.put("Levitation", StatusEffects.LEVITATION);
+            TARGET_EFFECTS.put("Luck", StatusEffects.LUCK);
+            TARGET_EFFECTS.put("BadLuck", StatusEffects.UNLUCK);
+            TARGET_EFFECTS.put("SlowFalling", StatusEffects.SLOW_FALLING);
+            TARGET_EFFECTS.put("ConduitPower", StatusEffects.CONDUIT_POWER);
+            TARGET_EFFECTS.put("DolphinsGrace", StatusEffects.DOLPHINS_GRACE);
+            TARGET_EFFECTS.put("Bad_omen", StatusEffects.BAD_OMEN);
+            TARGET_EFFECTS.put("VillageHero", StatusEffects.HERO_OF_THE_VILLAGE);
         }
         private String testIfAir(ItemStack item) {
-            if (item.getTranslationKey().equals("block.minecraft.air")) {
+            if (item.isEmpty() || item.getItem() == Items.AIR) {
                 return null;
-            }
-            else {
-                return item.getTranslationKey().replace("block.", "");
+            } else {
+                Identifier id = Registries.ITEM.getId(item.getItem());
+                return id != null ? id.toString().replace("minecraft:", "") : null;
             }
         }
         private void getInfos() {
             try {
                 PlayerEntity player = MinecraftClient.getInstance().player;
                 assert player != null;
-                health = player.getHealth();
-                maxHealth = player.getMaxHealth();
-                absorption = player.getAbsorptionAmount();
-                isDead = !player.isLiving();
-                armorPoints = player.getArmor();
-                experienceLevel = player.experienceLevel;
-                experience = player.experienceProgress;
-                foodLevel = player.getHungerManager().getFoodLevel();
-                saturationLevel = player.getHungerManager().getSaturationLevel();
-                isSneaking = player.isSneaking();
-                isRidingHorse = player.hasVehicle();
-                isBurning = player.isOnFire();
-                isInWater = player.isSubmergedInWater();
-                for (Map.Entry<String, StatusEffect> effect : TARGET_EFFECTS.entrySet())
-                    playerEffects.put(effect.getKey(), player.getStatusEffect(effect.getValue()) != null);
-                ArrayList<String> handItems = new ArrayList<>();
-                ArrayList<String> armorItems = new ArrayList<>();
-                player.getHandItems().forEach(item -> handItems.add(testIfAir(item)));
-                player.getArmorItems().forEach(item -> handItems.add(testIfAir(item)));
-                rightHandItem = handItems.get(0);
-                leftHandItem = handItems.get(1);
-                currentHotbarSlot = player.getInventory().selectedSlot;
-                if (!armorItems.isEmpty()) {
-                    armor.put("boots", armorItems.get(0));
-                    armor.put("leggings", armorItems.get(1));
-                    armor.put("chestplate", armorItems.get(2));
-                    armor.put("helmet", armorItems.get(3));
-                }
-                inGame = true;
+                Health = player.getHealth();
+                MaxHealth = player.getMaxHealth();
+                Absorption = player.getAbsorptionAmount();
+                IsDead = !player.isLiving();
+                ArmorPoints = player.getArmor();
+                ExperienceLevel = player.experienceLevel;
+                Experience = player.experienceProgress;
+                FoodLevel = player.getHungerManager().getFoodLevel();
+                SaturationLevel = player.getHungerManager().getSaturationLevel();
+                IsSneaking = player.isSneaking();
+                IsRidingHorse = player.hasVehicle();
+                IsBurning = player.isOnFire();
+                IsInWater = player.isSubmergedInWater();
+                for (Map.Entry<String, RegistryEntry<StatusEffect>> effect : TARGET_EFFECTS.entrySet())
+                    PlayerEffects.put(effect.getKey(), player.hasStatusEffect(effect.getValue()));
+
+                RightHandItem = testIfAir(player.getEquippedStack(EquipmentSlot.MAINHAND));
+                LeftHandItem = testIfAir(player.getEquippedStack(EquipmentSlot.OFFHAND));
+                CurrentHotbarSlot = player.getInventory().getSelectedSlot();
+                Armor.put("boots", testIfAir(player.getEquippedStack(EquipmentSlot.FEET)));
+                Armor.put("leggings", testIfAir(player.getEquippedStack(EquipmentSlot.LEGS)));
+                Armor.put("chestplate", testIfAir(player.getEquippedStack(EquipmentSlot.CHEST)));
+                Armor.put("helmet", testIfAir(player.getEquippedStack(EquipmentSlot.HEAD)));
+                InGame = true;
             } catch (Exception ex) {
-                inGame = false;
+                InGame = false;
             }
 
         }
     }
 
     private static class WorldInfos {
-        private long worldTime;
-        private boolean isDayTime;
-        private boolean isRaining;
-        private float rainStrength;
-        private String dimension;
+        private long WorldTime;
+        private boolean IsDayTime;
+        private boolean IsRaining;
+        private float RainStrength;
+        private String Dimension;
+        private String Biome;
 
         private void getInfos() {
             try {
                 ClientWorld world = MinecraftClient.getInstance().world;
                 assert world != null;
-                worldTime = world.getTimeOfDay();
-                isDayTime = world.isDay();
-                rainStrength = world.getRainGradient(1);
-                isRaining = world.isRaining();
-                dimension = world.getRegistryKey().getValue().toString();
+                WorldTime = world.getTimeOfDay();
+                IsDayTime = world.isDay();
+                RainStrength = world.getRainGradient(1);
+                IsRaining = world.isRaining();
+                Dimension = world.getRegistryKey().getValue().toString();
+                Biome = world.getBiome(MinecraftClient.getInstance().player.getBlockPos()).getKey().get().getValue().toString();
             } catch (Exception ex) {
 
             }
@@ -153,29 +172,29 @@ public class MinecraftInfos {
     }
     private static class GUIInfos {
         private static class KeyCode {
-            public String code;
-            public String context;
+            public String Code;
+            public String Context;
 
             public KeyCode(String code, String context) {
-                this.code = code;
-                this.context = context;
+                this.Code = code;
+                this.Context = context;
             }
         }
-        private boolean optionsGuiOpen;
-        private boolean controlsGuiOpen;
-        private boolean chatGuiOpen;
-        private boolean keybindsGuiOpen;
+        private boolean OptionsGuiOpen;
+        private boolean ControlsGuiOpen;
+        private boolean ChatGuiOpen;
+        private boolean KeybindsGuiOpen;
         private KeyCode[] keys;
 
         private void getInfos() {
             try {
                 MinecraftClient client = MinecraftClient.getInstance();
-                chatGuiOpen = client.currentScreen instanceof ChatScreen;
-                optionsGuiOpen = client.currentScreen instanceof OptionsScreen;
-                controlsGuiOpen = client.currentScreen instanceof ControlsOptionsScreen;
-                keybindsGuiOpen = client.currentScreen instanceof KeybindsScreen;
+                ChatGuiOpen = client.currentScreen instanceof ChatScreen;
+                OptionsGuiOpen = client.currentScreen instanceof OptionsScreen;
+                ControlsGuiOpen = client.currentScreen instanceof ControlsOptionsScreen;
+                KeybindsGuiOpen = client.currentScreen instanceof KeybindsScreen;
                 /*keys = null;
-                if (controlsGuiOpen) {
+                if (ControlsGuiOpen) {
                     KeyBinding[] temp = client.options.;
                     List<KeyCode> tempList = new ArrayList<>();
                     for (KeyBinding key : temp) {

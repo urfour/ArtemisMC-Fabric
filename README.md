@@ -1,6 +1,6 @@
 # ArtemisMC
-![Minecraft version](https://img.shields.io/badge/MC%20version-1.20.1-green)
-![Fabric version](https://img.shields.io/badge/Fabric%20version-0.11.2-8A2BE2)
+![Minecraft version](https://img.shields.io/badge/MC%20version-1.21.10-green)
+![Fabric version](https://img.shields.io/badge/Fabric%20version-0.135.0-8A2BE2)
 
 ArtemisMC is a Fabric mod designed to add Minecraft Game State Integration in [Artemis](https://artemis-rgb.com/).
 

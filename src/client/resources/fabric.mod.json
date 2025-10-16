@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "artemismc",
-  "version": "1.1.1.1",
+  "version": "1.1.1.2",
 
   "name": "Artemis",
   "description": "Game State Integration for Artemis RGB",
@@ -25,6 +25,8 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.4.0"
+    "fabricloader": ">=0.15.11",
+    "fabric-api": ">=0.135.0",
+    "minecraft": "~1.21"
   }
 }
