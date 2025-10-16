@@ -64,6 +64,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artemis-${{ github.ref_name }}.jar
-          asset_name: artemis-${{ github.ref_name }}.jar
+          asset_path: artemismc-${{ github.ref_name }}.jar
+          asset_name: artemismc-${{ github.ref_name }}.jar
           asset_content_type: application/octet-stream

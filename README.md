@@ -15,6 +15,15 @@ ArtemisMC is a Fabric mod designed to add Minecraft Game State Integration in [A
   - Food / Saturation
   - Effects (potion / beacons and other)
   - State (running, swimming, sneaking, burning)
+- World information
+  - Time
+  - Weather
+  - Dimension
+  - Biome
+- GUI information
+  - Chat
+  - Options
+  - Controls
 
 It uses the IP provided by Artemis, so feel free to change the port if you want.
 
