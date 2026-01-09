@@ -21,7 +21,7 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v4
       - name: validate gradle wrapper
-        uses: gradle/wrapper-validation-action@v3
+        uses: gradle/actions/wrapper-validation@v3
       - name: setup jdk ${{ matrix.java }}
         uses: actions/setup-java@v4
         with:
@@ -46,30 +46,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ArtemisMC
+          path: artifacts
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: v${{ github.ref_name }}
-          body: TODO
-          draft: true
+          files: artifacts/*.jar
+          draft: false
           prerelease: false
-      - name: Find Release Asset
-        id: find_release_asset
-        run: |
-          JAR_FILE=$(find ArtemisMC -name "artemismc-*.jar" ! -name "*-sources.jar" | head -n 1)
-          echo "asset_path=$JAR_FILE" >> $GITHUB_OUTPUT
-          echo "asset_name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.find_release_asset.outputs.asset_path }}
-          asset_name: ${{ steps.find_release_asset.outputs.asset_name }}
-          asset_content_type: application/octet-stream
