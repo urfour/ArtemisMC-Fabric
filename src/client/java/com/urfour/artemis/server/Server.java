@@ -2,16 +2,16 @@ package com.urfour.artemis.server;
 
 import com.google.gson.Gson;
 import com.urfour.artemis.infos.MinecraftInfos;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 public class Server implements Runnable {
@@ -67,11 +67,15 @@ public class Server implements Runnable {
             
             String json = gson.toJson(infos);
             
-            HttpClient httpClient = HttpClientBuilder.create().build();
-            HttpPost request = new HttpPost(IP + "plugins/25dacd2d-9275-4d94-bc12-8761dedf0f1d/Minecraft");
-            request.addHeader("Content-Type", "application/json");
-            request.setEntity(new StringEntity(json));
-            httpClient.execute(request);
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(IP + "plugins/25dacd2d-9275-4d94-bc12-8761dedf0f1d/Minecraft"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+            client.send(request, HttpResponse.BodyHandlers.discarding());
+
         } catch (Throwable t) {
             LOGGER.error("Error in Server.run()", t);
         }
